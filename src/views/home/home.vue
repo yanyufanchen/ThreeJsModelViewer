@@ -27,9 +27,9 @@
   </div>
 </template>
 <script>
-import modelviewer from "../modelview/Modelviewer.vue";
+import modelviewer from '../modelview/Modelviewer.vue';
 export default {
-  name: "home",
+  name: 'home',
   data() {
     return {
       modalViewerFlag: false,
@@ -39,28 +39,28 @@ export default {
           id: 1,
           fileData: {
             modelUrl:
-              "http://113.57.121.225:3002/model/5/模型分类/SMT/ACU控制箱",
-            resourceType: "",
-            resourceName: "ACU控制箱",
-            type: ["obj", "mtl"],
+              'http://113.57.121.225:3002/model/5/模型分类/SMT/ACU控制箱',
+            resourceType: '',
+            resourceName: 'ACU控制箱',
+            type: ['obj', 'mtl'],
           },
         },
         {
           id: 2,
           fileData: {
-            modelUrl: "./static/models/fangzi",
-            resourceType: "glb",
-            resourceName: "fangzi",
-            type: ["glb"],
+            modelUrl: './models/fangzi',
+            resourceType: 'glb',
+            resourceName: 'fangzi',
+            type: ['glb'],
           },
         },
         {
           id: 3,
           fileData: {
-            modelUrl: "./static/models/zuozi",
-            resourceType: "glb",
-            resourceName: "zuozi",
-            type: ["glb"],
+            modelUrl: './models/zuozi',
+            resourceType: 'glb',
+            resourceName: 'zuozi',
+            type: ['glb'],
           },
         },
       ],
@@ -77,7 +77,7 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .home {
   .header {
     width: 100%;

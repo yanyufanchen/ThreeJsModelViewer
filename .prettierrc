@@ -1,0 +1,18 @@
+{
+  "trailingComma": "all",
+  "semi": true,
+  "singleQuote": true,
+  "arrowParens": "always",
+  "spaced-comment": [
+    2,
+    "always"
+  ],
+  "overrides": [
+    {
+      "files": "*.less",
+      "options": {
+        "singleQuote": false
+      }
+    }
+  ]
+}
