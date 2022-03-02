@@ -4,7 +4,7 @@ import { createVuePlugin } from 'vite-plugin-vue2'
 import path from 'path'
 export default {
     plugins: [createVuePlugin()],
-    base: '/ThreeJsModelViewer/ ',
+    base: '/ThreeJsModelViewer/',
     css: {
         //* css模块化
         modules: { // css模块化 文件以.module.[css|less|scss]结尾
