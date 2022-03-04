@@ -10,16 +10,16 @@
           class="model"
         >
           <div class="image" @click="renderModel(model)">
-            <img alt="example" :src="model.imgUrl" />
+            <img alt="example" :src="model.fileData.modelImage" />
           </div>
 
           <a-card-meta :title="model.fileData.resourceName">
             <template slot="description">
               <div
                 class="modelDownload"
-                @click="download(model.modeldownLoadUrl)"
+                @click="download(model.fileData.modelUrl)"
               >
-                {{ model.modeldownLoadUrl }}
+                {{ model.fileData.modelUrl }}
               </div>
             </template>
           </a-card-meta>
@@ -50,35 +50,30 @@ export default {
     modelviewer,
   },
   mounted() {
-    // 处理glb文件
-    let files = require.context('../../../public/', true, /.glb$/).keys();
-    files.forEach((file) => {
-      let modelPath = file.substring(file.lastIndexOf('/'), 0);
-      let resourceName = file
-        .substring(file.lastIndexOf('/') + 1)
-        .split('.')[0];
-      let resourceType = file
-        .substring(file.lastIndexOf('/') + 1)
-        .split('.')[1];
-      this.modellist.push({
+    //     fileData:Object
+    // modelUrl:"http://localhost:8080/models/卡车"
+    // resourceName:"卡车"
+    // resourceType:"glb"
+    // type:Array[1]
+    // 0:"glb"
+    // id:"65.39160641116237"
+    // imgUrl:"./models/卡车/index.png"
+    // modeldownLoadUrl:"http://localhost:8080/models/卡车/卡车.glb"
+    let files = [
+      {
         id: String(Math.random() * 1000),
-        imgUrl: `${modelPath}/index.png`,
-        modeldownLoadUrl: `${window.location.origin}${
-          window.location.pathname
-        }${file
-          .substring(file.lastIndexOf('/'), 1)
-          .substring(1)}/${resourceName}.${resourceType}`,
         fileData: {
-          modelUrl: `${window.location.origin}${window.location.pathname}${file
-            .substring(file.lastIndexOf('/'), 1)
-            .substring(1)}`,
-          resourceType,
-          resourceName,
-          type: [resourceType],
+          resourceName: '办公大楼',
+          modelImage:
+            'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-d3ca2bf9-a00e-476d-9447-92a65ac1a70a/54e669e8-a9d2-4a69-b78e-d74f3f506612.png',
+          modelUrl:
+            'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-d3ca2bf9-a00e-476d-9447-92a65ac1a70a/7ea3b300-7e6d-49bf-9116-f842bd717151.glb',
+          resourceType: 'glb',
+          type: ['glb'],
         },
-      });
-    });
-    console.log(files);
+      },
+    ];
+    this.modellist = files;
   },
   methods: {
     renderModel(model) {

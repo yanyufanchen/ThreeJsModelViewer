@@ -57,7 +57,7 @@ export class RenderModel {
     }
     // 初始化
     async init(el, model, renderModelApi) {
-
+        console.log(model, 'model')
         // 初始化容器
         this.createContainer(el)
         // 初始化场景

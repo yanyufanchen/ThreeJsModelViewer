@@ -267,11 +267,11 @@ const toFriendlySize = (byteSize) => {
 
 // 加载模型
 export const addMoelApi = (model, loaderModel) => {
-    console.log(model, 'model')
+    // console.log(model, 'model222222')
     return new Promise(async (resolve) => {
         if (model.fileData.resourceType && model.fileData.resourceType === 'glb') {
             const loaderRes = await GLBLoaderApi({
-                modelUrl: `${model.fileData.modelUrl}/`,
+                modelUrl: `${model.fileData.modelUrl}`,
                 fileName: model.fileData.resourceName,
             }, loaderModel);
             if (!loaderRes.status) {
@@ -292,7 +292,7 @@ export const addMoelApi = (model, loaderModel) => {
         } else if (model.fileData.type.length === 1 && model.fileData.type[0] === 'obj') {
             // 加载obj
             const loaderRes = await ObjLoaderApi({
-                modelUrl: `${model.fileData.modelUrl}/`,
+                modelUrl: `${model.fileData.modelUrl}`,
                 fileName: model.fileData.resourceName,
             }, loaderModel);
 
@@ -313,7 +313,7 @@ export const addMoelApi = (model, loaderModel) => {
         } else if (model.fileData.type.length === 2 && model.fileData.type[0] === 'obj') {
             // 加载obj mtl
             const loaderRes = await MTLandObjLoaderApi({
-                modelUrl: `${model.fileData.modelUrl}/`,
+                modelUrl: `${model.fileData.modelUrl}`,
                 fileName: model.fileData.resourceName,
             }, loaderModel);
             if (!loaderRes.status) {
@@ -333,7 +333,7 @@ export const addMoelApi = (model, loaderModel) => {
         } else if (model.fileData.type[0] === 'gltf') {
             // 加载gltf
             const loaderRes = await GLTFLoaderApi({
-                modelUrl: `${model.fileData.modelUrl}/`,
+                modelUrl: `${model.fileData.modelUrl}`,
                 fileName: model.fileData.resourceName,
             }, loaderModel);
             if (!loaderRes.status) {
@@ -381,11 +381,11 @@ export const MTLandObjLoaderApi = (modelObj, loadModel) =>
         };
         manager.addHandler(/\.dds$/i, new DDSLoader());
         new MTLLoader(manager).load(
-            `${modelObj.modelUrl}${modelObj.fileName}.mtl`,
+            `${modelObj.modelUrl.substring(modelObj.modelUrl.lastIndexOf('.'), 0)}.mtl`,
             (materials) => {
                 materials.preload();
                 new OBJLoader(manager).setMaterials(materials).load(
-                    `${modelObj.modelUrl}${modelObj.fileName}.obj`,
+                    modelObj.modelUrl,
                     async (object) => {
                         resolveMTL({
                             message: '加载模型成功',
@@ -419,7 +419,7 @@ export const ObjLoaderApi = (modelObj, loadModel) =>
         };
         manager.addHandler(/\.dds$/i, new DDSLoader());
         new OBJLoader(manager).load(
-            `${modelObj.modelUrl}${modelObj.fileName}.obj`,
+            modelObj.modelUrl,
             async (object) => {
                 resolveOBJ({
                     message: '加载模型成功',
@@ -452,7 +452,7 @@ export const GLTFLoaderApi = (modelObj, loadModel) =>
         };
         manager.addHandler(/\.dds$/i, new DDSLoader());
         new GLTFLoader(manager).load(
-            `${modelObj.modelUrl}${modelObj.fileName}.gltf`,
+            modelObj.modelUrl,
             async (object) => {
                 resolveGLTF({
                     message: '加载模型成功',
@@ -483,10 +483,9 @@ export const GLBLoaderApi = (modelObj, loadModel) =>
                 modelSize
             })
         };
-        console.log(`${modelObj.modelUrl}${modelObj.fileName}.glb`, '22222222222222')
         manager.addHandler(/\.dds$/i, new DDSLoader());
         new GLTFLoader(manager).load(
-            `${modelObj.modelUrl}${modelObj.fileName}.glb`,
+            modelObj.modelUrl,
             async (object) => {
                 resolveGLTF({
                     message: '加载模型成功',
