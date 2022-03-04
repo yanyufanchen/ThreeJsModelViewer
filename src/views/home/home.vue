@@ -53,7 +53,7 @@ export default {
     // 处理glb文件
     let files = require.context('../../../public/', true, /.glb$/).keys();
     files.forEach((file) => {
-      let modelUrl = file.substring(file.lastIndexOf('/'), 0);
+      let modelPath = file.substring(file.lastIndexOf('/'), 0);
       let resourceName = file
         .substring(file.lastIndexOf('/') + 1)
         .split('.')[0];
@@ -62,12 +62,16 @@ export default {
         .split('.')[1];
       this.modellist.push({
         id: String(Math.random() * 1000),
-        imgUrl: `${modelUrl}/index.png`,
+        imgUrl: `${modelPath}/index.png`,
         modeldownLoadUrl: `${window.location.origin}${
           window.location.pathname
-        }${file.substring(file.lastIndexOf('/'), 1).substring(1)}/${resourceName}.${resourceType}`,
+        }${file
+          .substring(file.lastIndexOf('/'), 1)
+          .substring(1)}/${resourceName}.${resourceType}`,
         fileData: {
-          modelUrl,
+          modelUrl: `${window.location.origin}${window.location.pathname}${file
+            .substring(file.lastIndexOf('/'), 1)
+            .substring(1)}`,
           resourceType,
           resourceName,
           type: [resourceType],

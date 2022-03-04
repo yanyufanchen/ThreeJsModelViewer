@@ -267,6 +267,7 @@ const toFriendlySize = (byteSize) => {
 
 // 加载模型
 export const addMoelApi = (model, loaderModel) => {
+    console.log(model, 'model')
     return new Promise(async (resolve) => {
         if (model.fileData.resourceType && model.fileData.resourceType === 'glb') {
             const loaderRes = await GLBLoaderApi({
@@ -482,6 +483,7 @@ export const GLBLoaderApi = (modelObj, loadModel) =>
                 modelSize
             })
         };
+        console.log(`${modelObj.modelUrl}${modelObj.fileName}.glb`, '22222222222222')
         manager.addHandler(/\.dds$/i, new DDSLoader());
         new GLTFLoader(manager).load(
             `${modelObj.modelUrl}${modelObj.fileName}.glb`,

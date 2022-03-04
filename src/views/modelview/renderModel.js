@@ -70,7 +70,6 @@ export class RenderModel {
         this.createOrbitcontrols()
         // 加载模型
         const addmodelRes = await this.addModel(model, renderModelApi)
-        // console.log(addmodelRes, 'addmodelRes')
         // 灯光设置
         // 辅助灯光
         let AuxiliaryLightFlag = this.rightMenu.ligntUI.childrenUI.find(item => item.id === 'AuxiliaryLight').status
@@ -382,10 +381,8 @@ export class RenderModel {
     // 开启灯光阴影 同时开启模型体接受阴影
     LightShadow(flag) {
         let status = flag ? true : false
-        console.log(status, status ? '开启阴影' : '关闭阴影')
         // 开启主灯光阴影
         if (this.Keylight.SpotLight) {
-            console.log(status, '主灯光阴影')
             this.Keylight.SpotLight.castShadow = status
             this.Keylight.SpotLight.receiveShadow = status
 
@@ -412,12 +409,9 @@ export class RenderModel {
         // }
         // 循环开启模型阴影
         let setModelShadow = (model) => {
-            // console.log(status, 'model阴影')
             model.children && model.children.forEach(item => {
                 if (item.type === "Mesh") {
                     item.castShadow = status //  物体遮挡阴影 
-                    // item.receiveShadow = status
-                    // console.log(item, 'model')
                 }
                 if (item.children && item.children.length > 0) {
                     setModelShadow(item)
@@ -460,7 +454,6 @@ export class RenderModel {
     }
     // 窗口变动触发的方法
     onWindowResize() {
-        console.log(this.parantDom, 111)
         // 重新设置相机的宽高比
         this.camera.aspect = this.parantDom.offsetWidth / this.parantDom.offsetHeight;
         // 更新相机投影矩阵
