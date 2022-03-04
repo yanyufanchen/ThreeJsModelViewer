@@ -48,7 +48,7 @@ const vueConfig = {
   //   },
   // },
 
-  publicPath: '/',
+  publicPath: './',
   outputDir: 'dist',
 
   // disable source map in production
