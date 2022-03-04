@@ -100,6 +100,7 @@ export class RenderModel {
         this.animate();
         // 窗口自适应
         this.onWindowResize();
+        window.addEventListener('resize', this.onWindowResize.bind(this), false);
 
 
     }
@@ -459,6 +460,7 @@ export class RenderModel {
     }
     // 窗口变动触发的方法
     onWindowResize() {
+        console.log(this.parantDom, 111)
         // 重新设置相机的宽高比
         this.camera.aspect = this.parantDom.offsetWidth / this.parantDom.offsetHeight;
         // 更新相机投影矩阵
