@@ -1,28 +1,37 @@
 <template>
   <div class="home">
-    <div class="header">模型查看器展示</div>
+    <!-- <div class="header"></div> -->
     <div class="modelList">
-      <div class="title">模型列表</div>
-      <div class="models">
-        <span
+      <a-card title="模型查看器展示">
+        <a-card-grid
+          style="width: 25%; text-align: center; padding: 5px"
           v-for="model in modellist"
           :key="model.id"
           class="model"
-          @click="renderModel(model)"
-          >{{ model.fileData.resourceName }}</span
         >
-      </div>
+          <div class="image" @click="renderModel(model)">
+            <img alt="example" :src="model.imgUrl" />
+          </div>
+
+          <a-card-meta :title="model.fileData.resourceName">
+            <template slot="description">
+              <div
+                class="modelDownload"
+                @click="download(model.modeldownLoadUrl)"
+              >
+                {{ model.modeldownLoadUrl }}
+              </div>
+            </template>
+          </a-card-meta>
+        </a-card-grid>
+      </a-card>
     </div>
     <!-- 模型查看器 -->
     <modelviewer
       ref="modelviewerCom"
       v-if="modalViewerFlag"
       :model="model"
-      @close="
-        () => {
-          modalViewerFlag = false;
-        }
-      "
+      @close="closemodelViewer"
     ></modelviewer>
   </div>
 </template>
@@ -34,45 +43,49 @@ export default {
     return {
       modalViewerFlag: false,
       model: null,
-      modellist: [
-        {
-          id: 1,
-          fileData: {
-            modelUrl:
-              'http://113.57.121.225:3002/model/5/模型分类/SMT/ACU控制箱',
-            resourceType: '',
-            resourceName: 'ACU控制箱',
-            type: ['obj', 'mtl'],
-          },
-        },
-        {
-          id: 2,
-          fileData: {
-            modelUrl: './models/fangzi',
-            resourceType: 'glb',
-            resourceName: 'fangzi',
-            type: ['glb'],
-          },
-        },
-        {
-          id: 3,
-          fileData: {
-            modelUrl: './models/zuozi',
-            resourceType: 'glb',
-            resourceName: 'zuozi',
-            type: ['glb'],
-          },
-        },
-      ],
+      modellist: [],
     };
   },
   components: {
     modelviewer,
   },
+  mounted() {
+    // 处理glb文件
+    let files = require.context('../../../public/', true, /.glb$/).keys();
+    files.forEach((file) => {
+      let modelUrl = file.substring(file.lastIndexOf('/'), 0);
+      let resourceName = file
+        .substring(file.lastIndexOf('/') + 1)
+        .split('.')[0];
+      let resourceType = file
+        .substring(file.lastIndexOf('/') + 1)
+        .split('.')[1];
+      this.modellist.push({
+        id: String(Math.random() * 1000),
+        imgUrl: `${modelUrl}/index.png`,
+        modeldownLoadUrl: `${window.location.origin}${modelUrl.substring(
+          1,
+        )}/${resourceName}.${resourceType}`,
+        fileData: {
+          modelUrl,
+          resourceType,
+          resourceName,
+          type: [resourceType],
+        },
+      });
+    });
+    console.log(files);
+  },
   methods: {
     renderModel(model) {
       this.modalViewerFlag = true;
       this.model = model;
+    },
+    download(url) {
+      window.open(url);
+    },
+    closemodelViewer() {
+      this.modalViewerFlag = false;
     },
   },
 };
@@ -86,17 +99,28 @@ export default {
     border-bottom: 1px solid #ccc;
   }
   .modelList {
-    .models {
-      margin-top: 30px;
-      .model {
-        text-decoration: underline;
+    padding: 10px;
+    .image {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-bottom: 100%;
+      margin-bottom: 5px;
+      img {
         cursor: pointer;
-        padding: 10px;
-        color: rgb(39, 113, 209);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
       }
-      .model:hover {
-        color: red;
-      }
+    }
+    .modelDownload {
+      cursor: default;
+      color: rgb(33, 118, 222);
+    }
+    .modelDownload:hover {
+      color: rgb(233, 79, 79);
     }
   }
   .modelviewBox {

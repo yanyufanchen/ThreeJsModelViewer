@@ -33,6 +33,7 @@ export class RenderModel {
         this.LightHelper = {
             HemisphereLightHelper: null,
             SpotLightHelper: null,
+            SpotLightshadowCameraHelper: null, // 聚光灯阴影辅助器
             DirectionalLightHelper_XZ: null,  // 正向 x y
             DirectionalLightHelper_XRZ: null,  // 正向 x -y
             DirectionalLightHelper_RXZ: null,  // 正向 -x y
@@ -69,7 +70,7 @@ export class RenderModel {
         this.createOrbitcontrols()
         // 加载模型
         const addmodelRes = await this.addModel(model, renderModelApi)
-        console.log(addmodelRes, 'addmodelRes')
+        // console.log(addmodelRes, 'addmodelRes')
         // 灯光设置
         // 辅助灯光
         let AuxiliaryLightFlag = this.rightMenu.ligntUI.childrenUI.find(item => item.id === 'AuxiliaryLight').status
@@ -100,6 +101,13 @@ export class RenderModel {
         // 窗口自适应
         this.onWindowResize();
 
+
+    }
+    // 卸载模型查看器
+    remove() {
+        console.log('移除画布')
+        const f = document.getElementsByClassName('view')[0]
+        f.removeChild(document.getElementById('ModelViewerBox'))
 
     }
     // 创建容器
@@ -284,22 +292,31 @@ export class RenderModel {
         if (this.Keylight.SpotLight) {
             this.LightHelper.SpotLightHelper = new THREE.SpotLightHelper(this.Keylight.SpotLight);
             this.scene.add(this.LightHelper.SpotLightHelper);
+            this.LightHelper.SpotLightshadowCameraHelper = new THREE.CameraHelper(this.Keylight.SpotLight.shadow.camera);
+            this.LightHelper.SpotLightshadowCameraHelper.visible = true;
+            this.scene.add(this.LightHelper.SpotLightshadowCameraHelper)
         }
     }
     // 移除灯光辅助器
     removeLightHelper() {
         this.LightHelper.HemisphereLightHelper && this.scene.remove(this.LightHelper.HemisphereLightHelper)
         this.LightHelper.SpotLightHelper && this.scene.remove(this.LightHelper.SpotLightHelper)
+        this.LightHelper.SpotLightshadowCameraHelper && this.scene.remove(this.LightHelper.SpotLightshadowCameraHelper)
+
+        this.LightHelper.DirectionalLightHelper_XZ && this.scene.remove(this.LightHelper.DirectionalLightHelper_XZ)
+        this.LightHelper.DirectionalLightHelper_RXZ && this.scene.remove(this.LightHelper.DirectionalLightHelper_RXZ)
+        this.LightHelper.DirectionalLightHelper_XRZ && this.scene.remove(this.LightHelper.DirectionalLightHelper_XRZ)
+        this.LightHelper.DirectionalLightHelper_RXRZ && this.scene.remove(this.LightHelper.DirectionalLightHelper_RXRZ)
     }
     // 创建辅助灯光
     createAuxiliaryLight() {
         // 添加灯光
-        this.AuxiliaryLight.AmbientLight = new THREE.AmbientLight(0x666666, 1.5); // 环境光
-        this.AuxiliaryLight.HemisphereLight = new THREE.HemisphereLight(0xffffff, 0x000000, 0.5); // 半球光
-        this.AuxiliaryLight.DirectionalLight_XZ = new THREE.DirectionalLight(0xffffff, 0.1);
-        this.AuxiliaryLight.DirectionalLight_XRZ = new THREE.DirectionalLight(0xffffff, 0.1);
-        this.AuxiliaryLight.DirectionalLight_RXZ = new THREE.DirectionalLight(0xffffff, 0.1);
-        this.AuxiliaryLight.DirectionalLight_RXRZ = new THREE.DirectionalLight(0xffffff, 0.1);
+        this.AuxiliaryLight.AmbientLight = new THREE.AmbientLight(0x666666, 1); // 环境光
+        this.AuxiliaryLight.HemisphereLight = new THREE.HemisphereLight(0xffffff, 0x000000, 0.1); // 半球光
+        this.AuxiliaryLight.DirectionalLight_XZ = new THREE.DirectionalLight(0xffffff, 0.05);
+        this.AuxiliaryLight.DirectionalLight_XRZ = new THREE.DirectionalLight(0xffffff, 0.05);
+        this.AuxiliaryLight.DirectionalLight_RXZ = new THREE.DirectionalLight(0xffffff, 0.05);
+        this.AuxiliaryLight.DirectionalLight_RXRZ = new THREE.DirectionalLight(0xffffff, 0.05);
         // 更新灯光位置
         this.updateLight()
         // 灯光阴影
@@ -323,8 +340,8 @@ export class RenderModel {
         this.Keylight.SpotLight = new THREE.SpotLight(0xffffff);
         this.Keylight.SpotLight.position.set(17, 45, 27);
         this.Keylight.SpotLight.castShadow = true;
-        this.Keylight.SpotLight.intensity = 2; // 强度
-        this.Keylight.SpotLight.angle = Math.PI / 10; // 光线散射角度，最大为Math.PI/2。单位是弧度，默认值：Math.PI/3
+        this.Keylight.SpotLight.intensity = 2.5; // 强度
+        this.Keylight.SpotLight.angle = Math.PI / 4; // 光线散射角度，最大为Math.PI/2。单位是弧度，默认值：Math.PI/3
         this.Keylight.SpotLight.distance = 1000 // 光源照射的距离。默认值为 0，这意味着光线强度不会随着距离增加而减弱。
         this.Keylight.SpotLight.exponent = 1 // 光强衰减指数。使用 THREE.SpotLight 光源，发射的光线的强度随着光源距离的增加而减弱
         this.Keylight.SpotLight.decay = 1.5 // 沿着光照距离的衰减量
@@ -356,7 +373,7 @@ export class RenderModel {
             this.AuxiliaryLight.DirectionalLight_RXRZ.position.set(-x * 1.5, y * 0.35, -z * 1.5);
         }
         if (this.Keylight.SpotLight) {
-            this.Keylight.SpotLight.position.set(x ? x + 40 : 17, y ? y * 3 : 45, z ? z + 40 : 27);
+            this.Keylight.SpotLight.position.set(x ? x + 40 : 17, y ? y * 5 : 45, z ? z + 40 : 27);
             this.Keylight.SpotLight.target = this.model //聚光灯指向cube对象
         }
 
@@ -384,9 +401,7 @@ export class RenderModel {
             this.Keylight.SpotLight.shadow.fov = 10;            // default
             this.Keylight.SpotLight.shadow.focus = 1;            // default
 
-            var shadowCameraHelper = new THREE.CameraHelper(this.Keylight.SpotLight.shadow.camera);
-            shadowCameraHelper.visible = true;
-            this.scene.add(shadowCameraHelper)
+
         }
         // 开启辅助灯光阴影
         // if (this.AuxiliaryLight.HemisphereLight) {

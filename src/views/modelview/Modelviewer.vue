@@ -2,13 +2,6 @@
   <div class="modelviewer">
     <div class="centent">
       <div class="main" ref="modelviewerMain">
-        <div class="progress" v-if="modelLoader_show">
-          <div
-            class="loader"
-            :style="{ width: `${modelLoader_progress}%` }"
-          ></div>
-          <div class="text">{{ modelLoader_text }}</div>
-        </div>
         <div class="toolMenu">
           <div class="header">
             <div class="header_left">
@@ -39,11 +32,7 @@
               <a-icon
                 type="close"
                 class="header_right_icon"
-                @click="
-                  () => {
-                    $emit('close');
-                  }
-                "
+                @click="closeModal"
               />
             </div>
           </div>
@@ -74,7 +63,24 @@
           >
             子集
           </div>
-          <div class="iframebox" id="ModelViewerBox"></div>
+          <div class="iframebox" id="ModelViewerBox">
+            <!-- 加载器 -->
+            <div class="progress" v-if="modelLoader_show">
+              <a-progress type="circle" :percent="modelLoader_progress">
+                <template #format="percent">
+                  <div style="color: rgb(42, 74, 218); margin-bottom: 10px">
+                    模型加载中……
+                  </div>
+                  <div style="color: rgb(42, 74, 218)">{{ percent }}%</div>
+                </template>
+              </a-progress>
+              <!-- <div
+                class="loader"
+                :style="{ width: `${modelLoader_progress}%` }"
+              ></div>
+              <div class="text">{{ modelLoader_text }}</div> -->
+            </div>
+          </div>
           <div class="rightMenu" :style="{ height: `${rightMenuHeight}px` }">
             <a-collapse v-model="activeKey">
               <a-collapse-panel :header="rightMenu.environmentUI.name">
@@ -216,43 +222,43 @@
 </template>
 
 <script>
-import { RenderModel } from "./renderModel.js";
+import { RenderModel } from './renderModel.js';
 
 export default {
-  name: "Modelviewer",
-  props: ["model"],
+  name: 'Modelviewer',
+  props: ['model'],
   data() {
     return {
       visible: true,
       modelLoader_progress: 0,
-      modelLoader_show: false,
-      modelLoader_text: "",
+      modelLoader_show: false, // 加载器
+      modelLoader_text: '',
       // 顶部工具栏
       toolMenu: [
         {
-          id: "file",
-          name: "文件",
+          id: 'file',
+          name: '文件',
           children: [
             {
-              id: "export",
-              name: "导出",
-              icon: "download",
+              id: 'export',
+              name: '导出',
+              icon: 'download',
             },
             {
-              id: "screenshot",
-              name: "截图",
-              icon: "picture",
+              id: 'screenshot',
+              name: '截图',
+              icon: 'picture',
             },
           ],
         },
         {
-          id: "edit",
-          name: "编辑",
+          id: 'edit',
+          name: '编辑',
           children: [
             {
-              id: "disassemble",
-              name: "拆解",
-              icon: "unlock",
+              id: 'disassemble',
+              name: '拆解',
+              icon: 'unlock',
             },
             // {
             //   id: "screenshot",
@@ -261,39 +267,39 @@ export default {
           ],
         },
         {
-          id: "tool",
-          name: "工具",
+          id: 'tool',
+          name: '工具',
           children: [
             {
-              id: "statistics",
-              name: "统计信息",
-              icon: "file-search",
+              id: 'statistics',
+              name: '统计信息',
+              icon: 'file-search',
             },
             {
-              id: "sectioning",
-              name: "剖切",
-              icon: "to-top",
+              id: 'sectioning',
+              name: '剖切',
+              icon: 'to-top',
             },
           ],
         },
         {
-          id: "viewer",
-          name: "查看",
+          id: 'viewer',
+          name: '查看',
           children: [
             {
-              id: "blast",
-              name: "爆炸",
-              icon: "global",
+              id: 'blast',
+              name: '爆炸',
+              icon: 'global',
             },
             {
-              id: "measure",
-              name: "测量",
-              icon: "gateway",
+              id: 'measure',
+              name: '测量',
+              icon: 'gateway',
             },
             {
-              id: "ResetCamera",
-              name: "重置相机",
-              icon: "cloud-sync",
+              id: 'ResetCamera',
+              name: '重置相机',
+              icon: 'cloud-sync',
             },
           ],
         },
@@ -301,88 +307,88 @@ export default {
       // 右侧工具
       rightMenu: {
         environmentUI: {
-          name: "环境设置",
+          name: '环境设置',
           datalist: [
             {
               id: 1,
-              color: "#ccc",
+              color: '#ccc',
             },
             {
               id: 2,
-              color: "#FF4400",
+              color: '#FF4400',
             },
             {
               id: 3,
-              color: "#000000",
+              color: '#000000',
             },
             {
               id: 4,
-              color: "#FFF9AD",
+              color: '#FFF9AD',
             },
             {
               id: 5,
-              color: "#97C7C9",
+              color: '#97C7C9',
             },
             {
               id: 6,
-              color: "#FF9000",
+              color: '#FF9000',
             },
           ],
         },
         ligntUI: {
-          id: "ligntUI",
-          name: "灯光设置",
+          id: 'ligntUI',
+          name: '灯光设置',
           childrenUI: [
             {
-              id: "LightHelper",
-              name: "灯光辅助器",
+              id: 'LightHelper',
+              name: '灯光辅助器',
+              status: false,
+            },
+            {
+              id: 'AuxiliaryLight',
+              name: '辅助灯光',
               status: true,
             },
             {
-              id: "AuxiliaryLight",
-              name: "辅助灯光",
+              id: 'Keylight',
+              name: '主灯光',
               status: true,
             },
             {
-              id: "Keylight",
-              name: "主灯光",
-              status: true,
-            },
-            {
-              id: "Shadow",
-              name: "阴影",
+              id: 'Shadow',
+              name: '阴影',
               status: true,
             },
           ],
         },
         sceneUI: {
-          id: "sceneUI",
-          name: "场景控件",
+          id: 'sceneUI',
+          name: '场景控件',
           childrenUI: [
             {
-              id: "gridHelper",
-              name: "网格辅助",
+              id: 'gridHelper',
+              name: '网格辅助',
               status: false,
             },
             {
-              id: "viewHelper",
-              name: "坐标辅助",
+              id: 'viewHelper',
+              name: '坐标辅助',
               status: true,
             },
             {
-              id: "planeHelper",
-              name: "平面辅助",
+              id: 'planeHelper',
+              name: '平面辅助',
               status: true,
             },
           ],
         },
         toolUI: {
-          id: "toolUI",
-          name: "工具控件",
+          id: 'toolUI',
+          name: '工具控件',
           childrenUI: [
             {
-              id: "modelChildListHelper",
-              name: "模型层级",
+              id: 'modelChildListHelper',
+              name: '模型层级',
               status: false,
             },
           ],
@@ -402,12 +408,13 @@ export default {
   async mounted() {
     this.rightMenuHeight = this.$refs.modelviewerMain.clientHeight - 80 - 50;
     this.RenderModelApi = new RenderModel(this.rightMenu);
-    this.RenderModelApi.init("#ModelViewerBox", this.model, this.loaderModel);
+    this.RenderModelApi.init('#ModelViewerBox', this.model, this.loaderModel);
   },
   methods: {
     loaderModel(e) {
-      console.log(e, "模型加载");
+      console.log(e, '模型加载');
       if (!e) return;
+      this.modelLoader_show = true;
       this.modelLoader_progress = e.per;
       this.modelLoader_text = `加载中…… 文件大小：${e.modelSize}`;
       if (e.per === 100) {
@@ -416,35 +423,35 @@ export default {
     },
     // 灯光设置
     lightUIApi(item) {
-      console.log(item, "灯光设置");
+      console.log(item, '灯光设置');
       item.status = !item.status;
       if (!this.RenderModelApi.model) {
-        this.$message.warning("请选择模型");
+        this.$message.warning('请选择模型');
         return;
       }
       // 灯光辅助器
-      if (item.id === "LightHelper") {
+      if (item.id === 'LightHelper') {
         item.status
           ? this.RenderModelApi.createLightHelper()
           : this.RenderModelApi.removeLightHelper();
         return;
       }
       // 辅助灯光
-      if (item.id === "AuxiliaryLight") {
+      if (item.id === 'AuxiliaryLight') {
         item.status
           ? this.RenderModelApi.createAuxiliaryLight()
           : this.RenderModelApi.removeAuxiliaryLight();
         return;
       }
       // 主灯光
-      if (item.id === "Keylight") {
+      if (item.id === 'Keylight') {
         item.status
           ? this.RenderModelApi.createKeylight()
           : this.RenderModelApi.removeKeylight();
         return;
       }
       // 阴影
-      if (item.id === "Shadow") {
+      if (item.id === 'Shadow') {
         item.status
           ? this.RenderModelApi.LightShadow(true)
           : this.RenderModelApi.LightShadow(false);
@@ -453,26 +460,26 @@ export default {
     },
     // 场景设置
     sceneUIApi(item) {
-      console.log(item, "场景设置");
+      console.log(item, '场景设置');
       item.status = !item.status;
       if (!this.RenderModelApi.model) {
-        this.$message.warning("请选择模型");
+        this.$message.warning('请选择模型');
         return;
       }
       // 网格辅助
-      if (item.id === "gridHelper") {
+      if (item.id === 'gridHelper') {
         item.status
           ? this.RenderModelApi.createGridHelper()
           : this.RenderModelApi.removeGridHelper();
       }
       // 坐标辅助
-      if (item.id === "viewHelper") {
+      if (item.id === 'viewHelper') {
         item.status
           ? this.RenderModelApi.createViewHelper()
           : this.RenderModelApi.removeViewHelper();
       }
       // 平面辅助
-      if (item.id === "planeHelper") {
+      if (item.id === 'planeHelper') {
         item.status
           ? this.RenderModelApi.createPlaneHelper()
           : this.RenderModelApi.removePlaneHelper();
@@ -480,22 +487,27 @@ export default {
     },
     // 工具设置
     toolUIApi(item) {
-      console.log(item, "场景设置");
+      console.log(item, '场景设置');
       item.status = !item.status;
       // if (!this.RenderModelApi.model) {
       //   this.$message.warning("请选择模型");
       //   return;
       // }
       // 模型层级列表
-      if (item.id === "modelChildListHelper") {
+      if (item.id === 'modelChildListHelper') {
         // this.modelChildListHelperFlag=item.status
       }
     },
     // 查询辅助helper的status状态
     getUIHelperFlag(oneKey, helperId) {
       return this.rightMenu[oneKey].childrenUI.find(
-        (item) => item.id === helperId
+        (item) => item.id === helperId,
       ).status;
+    },
+    closeModal() {
+      // 移除
+      this.RenderModelApi.remove();
+      this.$emit('close');
     },
   },
 };
@@ -600,6 +612,13 @@ export default {
       .view {
         flex: 1;
         position: relative;
+        .progress {
+          position: absolute;
+          bottom: 28%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 999;
+        }
         .childList {
           position: absolute;
           top: 0;

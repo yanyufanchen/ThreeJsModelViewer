@@ -474,6 +474,7 @@ export const GLBLoaderApi = (modelObj, loadModel) =>
             });
         };
         const onProgress = (e) => {
+            console.log(e, '加载模型')
             let per = parseInt((e.loaded / e.total * 100))
             let modelSize = toFriendlySize(e.total)
             loadModel({
