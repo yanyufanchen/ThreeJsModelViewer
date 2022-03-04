@@ -106,6 +106,29 @@ export class RenderModel {
     // 卸载模型查看器
     remove() {
         console.log('移除画布')
+        /**
+     * 清空当前obj对象的缓存
+     * @param object object3D对象或mesh对象
+     * */
+        let clearCache = (object) => {
+            // console.log(object, 'object')
+            // let mesh = object;
+            // mesh.geometry.dispose();
+            // mesh.material.dispose();
+        }
+
+        /**
+         * 清空渲染器缓存，该demo中无需使用
+         */
+        let clearRenderer = () => {
+            console.log('清空renderer')
+            this.renderer.dispose();
+            this.renderer.forceContextLoss();
+            this.renderer.domElement = null;
+            this.renderer = null;
+        }
+        clearCache(this.model)
+        clearRenderer()
         const f = document.getElementsByClassName('view')[0]
         f.removeChild(document.getElementById('ModelViewerBox'))
 
@@ -216,7 +239,6 @@ export class RenderModel {
             // 添加模型
             let objectRes = await addMoelApi(model, loaderModel)
             if (!objectRes.status) {
-                // this.$message.error(objectRes.message)
                 resolve({
                     message: objectRes.message,
                     status: false
@@ -238,22 +260,32 @@ export class RenderModel {
             let mdlen = modelBox.max.x - modelBox.min.x;
             let mdhei = modelBox.max.y - modelBox.min.y;
             let mdwid = modelBox.max.z - modelBox.min.z;
-            let x1 = modelBox.min.x + mdlen / 2;
-            // let y1 = modelBox.min.y + mdhei / 2;
-            let y1 = 0 // 置于网格之上
-            let z1 = modelBox.min.z + mdwid / 2;
-            this.model.position.set(-x1, -y1, -z1); // 将模型原点归零
+            // console.log(modelBox, 'modelBox')
+
             let maxLength = (mdlen > mdwid ? mdlen : mdwid) > mdhei ? (mdlen > mdwid ? mdlen : mdwid) : mdhei;
+            let scaleMax = 1
+            if (maxLength < 1) { // 放大10倍
+                scaleMax = 10
+                // 模型放大十倍
+                this.model.scale.set(scaleMax, scaleMax, scaleMax);
+            }
+            // let x1 = modelBox.min.x + mdlen / 2;
+            // let y1 = modelBox.min.y + mdhei / 2;
+            // // let y1 = 0 // 置于网格之上
+            // let z1 = modelBox.min.z + mdwid / 2;
+            // console.log(mdhei, 'mdhei')
+            // console.log(y1, 'y1')
+            this.model.position.set(0, 0, 0); // 将模型原点归零
             // 更新相机位置
             this.camera.updateProjectionMatrix();
-            this.cameraReset({ x: maxLength, y: mdhei, z: maxLength })
+            this.cameraReset({ x: maxLength * scaleMax, y: mdhei * scaleMax, z: maxLength * scaleMax })
             // 统计模型位置
             this.modelSize = {
-                x: maxLength,
-                y: mdhei,
-                z: maxLength,
+                x: maxLength * scaleMax,
+                y: mdhei * scaleMax,
+                z: maxLength * scaleMax,
             }
-
+            console.log(this.modelSize, 'this.modelSize')
             this.scene.add(this.model)
             // 创建模型自身标签
             const modelDiv = document.createElement('div');
@@ -339,9 +371,9 @@ export class RenderModel {
         // 添加聚光灯
         this.Keylight.SpotLight = new THREE.SpotLight(0xffffff);
         this.Keylight.SpotLight.position.set(17, 45, 27);
-        this.Keylight.SpotLight.castShadow = true;
-        this.Keylight.SpotLight.intensity = 2.5; // 强度
-        this.Keylight.SpotLight.angle = Math.PI / 4; // 光线散射角度，最大为Math.PI/2。单位是弧度，默认值：Math.PI/3
+        // this.Keylight.SpotLight.castShadow = true;
+        this.Keylight.SpotLight.intensity = 2; // 强度
+        this.Keylight.SpotLight.angle = Math.PI / 3; // 光线散射角度，最大为Math.PI/2。单位是弧度，默认值：Math.PI/3
         this.Keylight.SpotLight.distance = 1000 // 光源照射的距离。默认值为 0，这意味着光线强度不会随着距离增加而减弱。
         this.Keylight.SpotLight.exponent = 1 // 光强衰减指数。使用 THREE.SpotLight 光源，发射的光线的强度随着光源距离的增加而减弱
         this.Keylight.SpotLight.decay = 1.5 // 沿着光照距离的衰减量
@@ -365,8 +397,8 @@ export class RenderModel {
         let y = this.modelSize ? this.modelSize.y * 1 : 0
         let z = this.modelSize ? this.modelSize.z * 1 : 0
         if (this.AuxiliaryLight) {
-            this.AuxiliaryLight.AmbientLight.position.set(0, y * 1.5, 0);
-            this.AuxiliaryLight.HemisphereLight.position.set(0, y * 1.5, 0);
+            this.AuxiliaryLight.AmbientLight.position.set(0, y * 2.5, 0);
+            this.AuxiliaryLight.HemisphereLight.position.set(0, y * 2.5, 0);
             this.AuxiliaryLight.DirectionalLight_XZ.position.set(x * 1.5, y * 0.35, z * 1.5);
             this.AuxiliaryLight.DirectionalLight_XRZ.position.set(x * 1.5, y * 0.35, -z * 1.5);
             this.AuxiliaryLight.DirectionalLight_RXZ.position.set(-x * 1.5, y * 0.35, z * 1.5);
@@ -438,6 +470,9 @@ export class RenderModel {
     // 关闭灯光阴影
     // 执行渲染
     render() {
+        if (!this.renderer) {
+            return
+        }
         this.renderer.clear()
         this.renderer.render(this.scene, this.camera);
         this.viewHelper && this.viewHelper.render(this.renderer, this.scene, this.camera)

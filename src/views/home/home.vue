@@ -72,6 +72,90 @@ export default {
           type: ['glb'],
         },
       },
+      {
+        id: String(Math.random() * 1000),
+        fileData: {
+          resourceName: '别墅',
+          modelImage:
+            'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-d3ca2bf9-a00e-476d-9447-92a65ac1a70a/c41dda32-e825-4992-b66c-ee085f6a81c9.png',
+          modelUrl:
+            'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-d3ca2bf9-a00e-476d-9447-92a65ac1a70a/2b5ac99c-ead9-4370-bc93-50094fb81559.glb',
+          resourceType: 'glb',
+          type: ['glb'],
+        },
+      },
+      {
+        id: String(Math.random() * 1000),
+        fileData: {
+          resourceName: '操作台',
+          modelImage:
+            'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-d3ca2bf9-a00e-476d-9447-92a65ac1a70a/9bc07ca8-2ada-4911-b692-f17d55cdf6d2.png',
+          modelUrl:
+            'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-d3ca2bf9-a00e-476d-9447-92a65ac1a70a/a712c0e6-5ff2-4e1a-862d-e52d7d8df98b.glb',
+          resourceType: 'glb',
+          type: ['glb'],
+        },
+      },
+      {
+        id: String(Math.random() * 1000),
+        fileData: {
+          resourceName: '高楼',
+          modelImage:
+            'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-d3ca2bf9-a00e-476d-9447-92a65ac1a70a/eb2b16cc-a612-4743-8cee-41310211af44.png',
+          modelUrl:
+            'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-d3ca2bf9-a00e-476d-9447-92a65ac1a70a/85de8f71-32f6-4c76-be6d-eacda606e7b6.glb',
+          resourceType: 'glb',
+          type: ['glb'],
+        },
+      },
+      {
+        id: String(Math.random() * 1000),
+        fileData: {
+          resourceName: '卡车',
+          modelImage:
+            'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-d3ca2bf9-a00e-476d-9447-92a65ac1a70a/d39169a6-a5f8-4e75-b01d-35c6d22ee8eb.png',
+          modelUrl:
+            'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-d3ca2bf9-a00e-476d-9447-92a65ac1a70a/2c62bdf4-e6b0-4349-98eb-0ea00587e710.glb',
+          resourceType: 'glb',
+          type: ['glb'],
+        },
+      },
+      {
+        id: String(Math.random() * 1000),
+        fileData: {
+          resourceName: '沙滩',
+          modelImage:
+            'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-d3ca2bf9-a00e-476d-9447-92a65ac1a70a/83b40c08-061c-4a75-ae6e-906a68e1c06d.png',
+          modelUrl:
+            'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-d3ca2bf9-a00e-476d-9447-92a65ac1a70a/19f4ea78-a00f-41d9-8de0-671a9000b741.glb',
+          resourceType: 'glb',
+          type: ['glb'],
+        },
+      },
+      {
+        id: String(Math.random() * 1000),
+        fileData: {
+          resourceName: '体育场',
+          modelImage:
+            'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-d3ca2bf9-a00e-476d-9447-92a65ac1a70a/ec36f185-d066-4f16-9188-00e7c86e220b.png',
+          modelUrl:
+            'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-d3ca2bf9-a00e-476d-9447-92a65ac1a70a/7aa19249-f61d-4c4b-9b2e-fd4fbf224038.glb',
+          resourceType: 'glb',
+          type: ['glb'],
+        },
+      },
+      {
+        id: String(Math.random() * 1000),
+        fileData: {
+          resourceName: '文字特效',
+          modelImage:
+            'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-d3ca2bf9-a00e-476d-9447-92a65ac1a70a/83235b78-3f8b-400a-b558-6255fce17646.png',
+          modelUrl:
+            'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-d3ca2bf9-a00e-476d-9447-92a65ac1a70a/22a10ee8-5c84-4dd8-98d0-9809cecbb0ca.glb',
+          resourceType: 'glb',
+          type: ['glb'],
+        },
+      },
     ];
     this.modellist = files;
   },
